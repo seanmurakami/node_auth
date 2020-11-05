@@ -15,12 +15,12 @@ mongoose.connect(
   process.env.DB_CONNECT,
   { useUnifiedTopology: true, useNewUrlParser: true },
   () => {
-    console.log("connected to db");
+    console.log("Connected to db");
   }
 );
 
 //Middleware
-app.use(express.json());
+app.use(express.json()); // Allows server to recognize the request body as a JSON object
 //Route Middlware
 app.use("/api/user", authRoute);
 
