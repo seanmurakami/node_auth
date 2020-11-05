@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const User = require("../model/User");
-const { registerValidation } = require("../validation");
+const { registerValidation, loginValidation } = require("../validation");
 const bcrypt = require("bcryptjs");
 
 //Post route to /api/user/register
@@ -35,6 +35,18 @@ router.post("/register", async (req, res) => {
 });
 
 //Post route to /api/user/login
-router.post("/login", (req, res) => {});
+router.post("/login", async (req, res) => {
+  const { error } = loginValidation(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  //Check is the user already exists
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) return res.status(400).send("Email or password is wrong");
+
+  const validPassword = await bcrypt.compare(req.body.password, user.password);
+  if (!validPassword) return res.status(400).send("Invalid password");
+
+  res.send("Logged in!");
+});
 
 module.exports = router;
