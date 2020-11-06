@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 
 //Import Routes
 const authRoute = require("./routes/auth");
+const postRoute = require("./routes/post");
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ mongoose.connect(process.env.DB_CONNECT, { useUnifiedTopology: true, useNewUrlPa
 app.use(express.json()); // Allows server to recognize the request body as a JSON object
 //Route Middlware
 app.use("/api/user", authRoute);
+app.use("/api/posts", postRoute);
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
